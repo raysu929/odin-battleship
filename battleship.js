@@ -1,11 +1,11 @@
 export class Ship {
   constructor(length) {
     this.length = length;
-    this.hit = 0;
+    this.hits = 0;
     this.sunk = false;
   }
   hit() {
-    this.hit++;
+    this.hits++;
   }
   isSunk() {
     if (this.hit >= this.length) {
@@ -47,7 +47,7 @@ export class Gameboard {
     if (this.board[row][col]) {
       this.board[row][col].hit();
     } else {
-      this.missed.push([row][col]);
+      this.missed.push([row, col]);
     }
   }
 }
