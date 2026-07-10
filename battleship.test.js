@@ -34,3 +34,9 @@ test("receive Attack to miss ship", () => {
   expect(board.missed).toEqual([[2, 1]])
 });
 
+test("ship sunk", () => {
+  board.receiveAttack(5, 2);
+  board.receiveAttack(5, 3);
+  board.receiveAttack(5, 4);
+  expect(ship.sunk).toBe(true);
+})

@@ -8,10 +8,10 @@ export class Ship {
     this.hits++;
   }
   isSunk() {
-    if (this.hit >= this.length) {
-      return true;
+    if (this.hits >= this.length) {
+      this.sunk = true;
     } else {
-      return false;
+       this.sunk = false;
     }
   }
 }
@@ -46,6 +46,7 @@ export class Gameboard {
   receiveAttack(row, col) {
     if (this.board[row][col]) {
       this.board[row][col].hit();
+      this.board[row][col].isSunk();
     } else {
       this.missed.push([row, col]);
     }
