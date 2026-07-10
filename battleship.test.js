@@ -1,4 +1,4 @@
-import { Ship, Gameboard } from "./battleship";
+import { Ship, Gameboard, Player} from "./battleship";
  
 let board;
 let ship;
@@ -39,4 +39,14 @@ test("ship sunk", () => {
   board.receiveAttack(5, 3);
   board.receiveAttack(5, 4);
   expect(ship.sunk).toBe(true);
+})
+
+test("real player", () => {
+const player1 = new Player("real")
+expect(player1.type).toBe("real")
+});
+
+test("computer player", () => {
+  const player2 = new Player("computer");
+  expect(player2.type).toBe("computer")
 })
