@@ -11,15 +11,26 @@ player2.gameboard.placeShip(ship2, 3, 1, "vertical");
 const player = document.querySelector(".player");
 const opponent = document.querySelector(".opponent");
 
-function renderBoard(gameboard, container) {
-  gameboard.board.forEach((row) => {
-    row.forEach((square) => {
+function renderBoard(gameboard, container, clickable) {
+  gameboard.board.forEach((row, rowIndex) => {
+    row.forEach((square, colIndex) => {
  const cell = document.createElement("div");
  cell.classList.add("cell");
+ if(clickable){
+   cell.addEventListener("click", () => {
+    const hit = gameboard.receiveAttack(rowIndex, colIndex);
+    if(hit){
+     cell.style.backgroundColor = "red";
+    }else{
+      cell.style.backgroundColor = "blue";
+    }
+   });
+ }
  container.appendChild(cell);
     })
      });
+    
   }
 
-renderBoard(player1.gameboard, player);
-renderBoard(player2.gameboard, opponent);
+renderBoard(player1.gameboard, player, false);
+renderBoard(player2.gameboard, opponent, true);

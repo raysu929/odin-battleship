@@ -15,8 +15,8 @@
 }
 .board{
   display: grid;
-  grid-template-columns: repeat(10, 35px);
-  grid-template-rows: repeat(10, 35px);
+  grid-template-columns: repeat(8, 40px);
+  grid-template-rows: repeat(8, 40px);
 }
 
 .cell{

@@ -47,8 +47,10 @@ export class Gameboard {
     if (this.board[row][col]) {
       this.board[row][col].hit();
       this.board[row][col].isSunk();
+      return true;
     } else {
       this.missed.push([row, col]);
+      return false;
     }
   }
 }
