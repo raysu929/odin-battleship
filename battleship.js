@@ -29,6 +29,7 @@ export class Gameboard {
     ];
     this.ships = [];
     this.missed = [];
+    this.hits = [];
   }
   placeShip(ship, row, col, direction) {
     if (direction === "horizontal") {
@@ -46,6 +47,7 @@ export class Gameboard {
   receiveAttack(row, col) {
     if (this.board[row][col]) {
       this.board[row][col].hit();
+      this.hits.push([row, col]);
       this.board[row][col].isSunk();
       return true;
     } else {
