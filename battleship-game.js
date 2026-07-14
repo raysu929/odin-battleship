@@ -16,41 +16,47 @@ function renderBoard(gameboard, container, clickable) {
   gameboard.board.forEach((row, rowIndex) => {
     row.forEach((square, colIndex) => {
       const cell = document.createElement("div");
-            cell.classList.add("cell");
+      cell.classList.add("cell");
 
       const wasHit = gameboard.hits.some((hit) => {
         return hit[0] === rowIndex && hit[1] === colIndex;
-
       });
-      const wasMissed = gameboard.missed.some((hit) => {
-        return hit[0] === rowIndex && hit[1] === colIndex;
-      })
-if(wasHit){
-cell.style.backgroundColor = "red";
-}else if(wasMissed){
-  cell.style.backgroundColor = "blue";
-}
+      const wasMissed = gameboard.missed.some((miss) => {
+        return miss[0] === rowIndex && miss[1] === colIndex;
+      });
+      if (wasHit) {
+        cell.style.backgroundColor = "red";
+      } else if (wasMissed) {
+        cell.style.backgroundColor = "blue";
+      }
       if (clickable) {
         cell.addEventListener("click", () => {
-        gameboard.receiveAttack(rowIndex, colIndex);
-        switchPlayer();
-renderGame();
+          const alreadyAttacked = wasHit || wasMissed;
+
+          if (alreadyAttacked) {
+            return;
+          } 
+           const hit = gameboard.receiveAttack(rowIndex, colIndex);
+          
+          if (!hit) {
+            switchPlayer();
+          }
+          renderGame();
         });
-        
       }
-          container.appendChild(cell);
+      container.appendChild(cell);
     });
   });
 }
-function renderGame(){
-renderBoard(player1.gameboard, player, false);
-renderBoard(player2.gameboard, opponent, true);
+function renderGame() {
+  renderBoard(player1.gameboard, player, false);
+  renderBoard(player2.gameboard, opponent, true);
 }
 
-function switchPlayer(){
-  if(currentPlayer === player1){
-let currentPlayer = player2
-  }else if(currentPlayer === player2){
-   let currentPlayer = player1
+function switchPlayer() {
+  if (currentPlayer === player1) {
+    currentPlayer = player2;
+  } else if (currentPlayer === player2) {
+    currentPlayer = player1;
   }
 }
