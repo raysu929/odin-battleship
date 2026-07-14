@@ -32,6 +32,7 @@ export class Gameboard {
     this.hits = [];
   }
   placeShip(ship, row, col, direction) {
+    this.ships.push(ship);
     if (direction === "horizontal") {
       for (let i = 0; i < ship.length; i++) {
         this.board[row][col + i] = ship;

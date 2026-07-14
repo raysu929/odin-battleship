@@ -10,6 +10,7 @@ player2.gameboard.placeShip(ship2, 3, 1, "vertical");
 const player = document.querySelector(".player");
 const opponent = document.querySelector(".opponent");
 let currentPlayer = player1;
+let gameEnded = false;
 
 function renderBoard(gameboard, container, clickable) {
   container.innerHTML = "";
@@ -31,7 +32,7 @@ function renderBoard(gameboard, container, clickable) {
       }
       if (clickable) {
         cell.addEventListener("click", () => {
-          if(currentPlayer !== player1){
+          if (gameEnded) {
             return;
           }
           const alreadyAttacked = wasHit || wasMissed;
@@ -42,6 +43,10 @@ function renderBoard(gameboard, container, clickable) {
            const hit = gameboard.receiveAttack(rowIndex, colIndex);
           if(hit){
             renderGame();
+           if (gameOver()) {
+            gameEnded = true;
+             return;
+           }
           }else if (!hit) {
             switchPlayer();
           }
@@ -91,9 +96,26 @@ return;
 const hit = player1.gameboard.receiveAttack(randomRow, randomCol);
 if(hit){
   renderGame();
-  computer();
+    if (gameOver()) {
+      gameEnded = true;
+      return;
+    }
+      computer();
 }else if (!hit){
 switchPlayer();
 renderGame();
 }
   }
+
+  function gameOver(){
+    if(player1.gameboard.ships.every(ship => ship.isSunk())){
+      console.log("Computer Wins!")
+      return true;
+    }
+    if(player2.gameboard.ships.every(ship => ship.isSunk())){
+      console.log("Player Wins!"); 
+      return true;
+    }
+    return false;
+    }
+  
