@@ -32,18 +32,37 @@ export class Gameboard {
     this.hits = [];
   }
   placeShip(ship, row, col, direction) {
-    this.ships.push(ship);
     if (direction === "horizontal") {
-      for (let i = 0; i < ship.length; i++) {
-        this.board[row][col + i] = ship;
+      if (col + ship.length > this.board.length) {
+        return false;
       }
+      for (let i = 0; i < ship.length; i++) {
+        if(this.board[row][col + i] !== null){
+          return false;
+        }
+         }
+         for (let i = 0; i < ship.length; i++) {
+           this.board[row][col + i] = ship;
+         }
+      
     } else if (direction === "vertical") {
+       if (row + ship.length > this.board.length) {
+         return false;
+       }
+      for (let i = 0; i < ship.length; i++) {
+        if (this.board[row + i][col] !== null){
+          return false;
+        }
+      }
       for (let i = 0; i < ship.length; i++) {
         this.board[row + i][col] = ship;
       }
     } else {
       throw new Error("Invalid");
     }
+    
+        this.ships.push(ship);
+        return true;
   }
   receiveAttack(row, col) {
     if (this.board[row][col]) {

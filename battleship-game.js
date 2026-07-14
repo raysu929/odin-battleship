@@ -4,6 +4,9 @@ const player1 = new Player("real");
 const player2 = new Player("computer");
 const ship1 = new Ship(3);
 const ship2 = new Ship(2);
+const ship3 = new Ship(4);
+const ship4 = new Ship(1)
+const ships = [ship1, ship2, ship3, ship4];
 player1.gameboard.placeShip(ship1, 5, 2, "horizontal");
 player2.gameboard.placeShip(ship2, 3, 1, "vertical");
 
@@ -25,6 +28,10 @@ function renderBoard(gameboard, container, clickable) {
       const wasMissed = gameboard.missed.some((miss) => {
         return miss[0] === rowIndex && miss[1] === colIndex;
       });
+      
+          if (square !== null && clickable === false) {
+            cell.style.backgroundColor = "grey";
+          }
       if (wasHit) {
         cell.style.backgroundColor = "red";
       } else if (wasMissed) {
@@ -75,7 +82,9 @@ function switchPlayer() {
 renderGame();
 
 function computer(){
-  
+  if(gameEnded){
+    return;
+  }
   const randomRow = Math.floor(Math.random() * player1.gameboard.board.length);
   const randomCol = Math.floor(
     Math.random() * player1.gameboard.board[randomRow].length,
@@ -108,14 +117,62 @@ renderGame();
   }
 
   function gameOver(){
+    const winner = document.getElementById("winner");
     if(player1.gameboard.ships.every(ship => ship.isSunk())){
-      console.log("Computer Wins!")
+      winner.innerText = "Computer Wins!";
       return true;
     }
     if(player2.gameboard.ships.every(ship => ship.isSunk())){
-      console.log("Player Wins!"); 
+      winner.innerText = "Player Wins!"; 
       return true;
     }
     return false;
     }
   
+const random = document.getElementById("random");
+function placeRandom(){
+random.addEventListener("click", () => {
+  player.innerHTML = "";
+  player1.gameboard.board = [
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+    [null, null, null, null, null, null, null, null],
+  ];
+  player1.gameboard.ships = [];
+    player1.gameboard.hits = [];
+  player1.gameboard.missed = [];
+
+
+  ships.forEach((ship) => {
+   let placed = false;
+    while(!placed){
+      const randomRow = Math.floor(
+        Math.random() * player1.gameboard.board.length,
+      );
+      const randomCol = Math.floor(
+        Math.random() * player1.gameboard.board[randomRow].length,
+      );
+      const directions = ["horizontal", "vertical"];
+      const randomDirection =
+        directions[Math.floor(Math.random() * directions.length)];
+      
+placed = player1.gameboard.placeShip(ship, randomRow, randomCol, randomDirection);
+    }
+  });
+ renderGame();
+})
+}
+    
+placeRandom();
+
+// Future me todo:
+// Add board labels a-h, 0-7
+//replace computer move with loop
+//make computer and ship have different ship objects
+//stop gameplay after ships sunk
+//add finishing touches if i visit this project
