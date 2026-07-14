@@ -31,17 +31,24 @@ function renderBoard(gameboard, container, clickable) {
       }
       if (clickable) {
         cell.addEventListener("click", () => {
+          if(currentPlayer !== player1){
+            return;
+          }
           const alreadyAttacked = wasHit || wasMissed;
 
           if (alreadyAttacked) {
             return;
           } 
            const hit = gameboard.receiveAttack(rowIndex, colIndex);
-          
-          if (!hit) {
+          if(hit){
+            renderGame();
+          }else if (!hit) {
             switchPlayer();
           }
-          renderGame();
+          if(currentPlayer === player2){
+            computer();
+          }
+          
         });
       }
       container.appendChild(cell);
@@ -60,3 +67,33 @@ function switchPlayer() {
     currentPlayer = player1;
   }
 }
+renderGame();
+
+function computer(){
+  
+  const randomRow = Math.floor(Math.random() * player1.gameboard.board.length);
+  const randomCol = Math.floor(
+    Math.random() * player1.gameboard.board[randomRow].length,
+  );
+
+      const wasHit = player1.gameboard.hits.some((hit) => {
+        return hit[0] === randomRow && hit[1] === randomCol;
+      });
+      const wasMissed = player1.gameboard.missed.some((miss) => {
+        return miss[0] === randomRow && miss[1] === randomCol;
+      });
+      const alreadyAttacked = wasHit || wasMissed;
+
+  if(alreadyAttacked){
+computer();
+return;
+  }
+const hit = player1.gameboard.receiveAttack(randomRow, randomCol);
+if(hit){
+  renderGame();
+  computer();
+}else if (!hit){
+switchPlayer();
+renderGame();
+}
+  }
